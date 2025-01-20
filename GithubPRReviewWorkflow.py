@@ -35,58 +35,19 @@ def get_pr_diff(repo_name, pr_number):
     pr = repo.get_pull(pr_number)
     return pr.get_files()
 
-# def analyze_code(file_content):
-#     prompt = f"""
-#     Analyze the following code for:
-#     1. Unreachable code
-#     2. Missing unit tests
-#     3. Optimization opportunities
-#     4. Time complexity issues
-#     5. Best practices violations
-#
-#     Code:
-#     {file_content}
-#
-#     Provide a detailed report on each aspect.
-#     """
-#     return perplexity_analyze(prompt)
-
-
 def analyze_code(file_content):
     prompt = f"""
-    Analyze the following code and provide a structured report with the following sections:
+    Analyze the following code for:
     1. Unreachable code
     2. Missing unit tests
     3. Optimization opportunities
     4. Time complexity issues
     5. Best practices violations
 
-    For each section, provide bullet points of findings or 'None found' if there are no issues.
-
     Code:
     {file_content}
 
-    Format your response as follows:
-
-    Unreachable code:
-    • [Your findings here]
-    • [Your findings here]
-
-    Missing unit tests:
-    • [Your findings here]
-    • [Your findings here]
-
-    Optimization opportunities:
-    • [Your findings here]
-    • [Your findings here]
-
-    Time complexity issues:
-    • [Your findings here]
-    • [Your findings here]
-
-    Best practices violations:
-    • [Your findings here]
-    • [Your findings here]
+    Provide a detailed report on each aspect.
     """
     return perplexity_analyze(prompt)
 
@@ -114,7 +75,7 @@ def code_review_workflow(input_link):
     report = generate_report(repo_name, pr_number)
 
     # Generate PDF report
-    generate_pdf_report(report,repo_name, pr_number)
+    # generate_pdf_report(report,repo_name, pr_number)
 
     # Post the report as a comment on the PR
     post_comment(repo_name, pr_number, report)
@@ -122,28 +83,28 @@ def code_review_workflow(input_link):
     return report
 
 
-def generate_pdf_report(report_content, repo_name, pr_number):
-    pdf_filename = "code_review_report.pdf"
-    doc = SimpleDocTemplate(pdf_filename, pagesize=letter)
-    styles = getSampleStyleSheet()
-
-    # Create the PDF content
-    content = []
-    content.append(Paragraph("Code Review Report", styles['Title']))
-    content.append(Paragraph(f"Repository Name : {repo_name}", styles["Heading3"]))
-    content.append(Paragraph(f"Pull Request Number : {pr_number}", styles["Heading3"]))
-
-    content.append(Spacer(1, 12))
-
-    # Split the report content into paragraphs
-    paragraphs = report_content.split('\n\n')
-    for para in paragraphs:
-        content.append(Paragraph(para, styles['Normal']))
-        content.append(Spacer(1, 6))
-
-    # Build the PDF
-    doc.build(content)
-    print(f"PDF report generated: {os.path.abspath(pdf_filename)}")
+# def generate_pdf_report(report_content, repo_name, pr_number):
+#     pdf_filename = "code_review_report.pdf"
+#     doc = SimpleDocTemplate(pdf_filename, pagesize=letter)
+#     styles = getSampleStyleSheet()
+#
+#     # Create the PDF content
+#     content = []
+#     content.append(Paragraph("Code Review Report", styles['Title']))
+#     content.append(Paragraph(f"Repository Name : {repo_name}", styles["Heading3"]))
+#     content.append(Paragraph(f"Pull Request Number : {pr_number}", styles["Heading3"]))
+#
+#     content.append(Spacer(1, 12))
+#
+#     # Split the report content into paragraphs
+#     paragraphs = report_content.split('\n\n')
+#     for para in paragraphs:
+#         content.append(Paragraph(para, styles['Normal']))
+#         content.append(Spacer(1, 6))
+#
+#     # Build the PDF
+#     doc.build(content)
+#     print(f"PDF report generated: {os.path.abspath(pdf_filename)}")
 
 def parse_pr_link(link):
     # Extract repo name and PR number from the link
