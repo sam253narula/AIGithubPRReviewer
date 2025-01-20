@@ -2,11 +2,6 @@ import os
 from dotenv import load_dotenv
 from github import Github
 from openai import OpenAI
-from reportlab.lib.pagesizes import letter
-from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle, PageBreak
-from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
-from reportlab.lib import colors
-from reportlab.lib.units import inch
 import requests
 
 load_dotenv()
@@ -74,37 +69,10 @@ def code_review_workflow(input_link):
 
     report = generate_report(repo_name, pr_number)
 
-    # Generate PDF report
-    # generate_pdf_report(report,repo_name, pr_number)
-
     # Post the report as a comment on the PR
     post_comment(repo_name, pr_number, report)
 
     return report
-
-
-# def generate_pdf_report(report_content, repo_name, pr_number):
-#     pdf_filename = "code_review_report.pdf"
-#     doc = SimpleDocTemplate(pdf_filename, pagesize=letter)
-#     styles = getSampleStyleSheet()
-#
-#     # Create the PDF content
-#     content = []
-#     content.append(Paragraph("Code Review Report", styles['Title']))
-#     content.append(Paragraph(f"Repository Name : {repo_name}", styles["Heading3"]))
-#     content.append(Paragraph(f"Pull Request Number : {pr_number}", styles["Heading3"]))
-#
-#     content.append(Spacer(1, 12))
-#
-#     # Split the report content into paragraphs
-#     paragraphs = report_content.split('\n\n')
-#     for para in paragraphs:
-#         content.append(Paragraph(para, styles['Normal']))
-#         content.append(Spacer(1, 6))
-#
-#     # Build the PDF
-#     doc.build(content)
-#     print(f"PDF report generated: {os.path.abspath(pdf_filename)}")
 
 def parse_pr_link(link):
     # Extract repo name and PR number from the link
